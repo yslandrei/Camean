@@ -1,15 +1,45 @@
 package com.camean.camean.model;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 
 @Document(collection = "camine")
 public class Camin {
+    @Id
+    private ObjectId id;
     private String name;
     private String city;
-    private String university;
-    private Float rating;
+    private String owner;
+    private ArrayList<Review> reviews;
 
-    public Camin() {
+    public Camin(ObjectId id, String name, String city, String owner, ArrayList<Review> reviews) {
+        this.id = id;
+        this.name = name;
+        this.city = city;
+        this.owner = owner;
+        this.reviews = reviews;
+    }
+
+    @Override
+    public String toString() {
+        return "Camin{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", owner='" + owner + '\'' +
+                ", reviews=" + reviews +
+                '}';
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 
     public String getName() {
@@ -28,29 +58,23 @@ public class Camin {
         this.city = city;
     }
 
-    public String getUniversity() {
-        return university;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setUniversity(String university) {
-        this.university = university;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public Float getRating() {
-        return rating;
+    public ArrayList<Review> getReviews() {
+        return reviews;
     }
 
-    public void setRating(Float rating) {
-        this.rating = rating;
+    public void setReviews(ArrayList<Review> reviews) {
+        this.reviews = reviews;
     }
 
-    @Override
-    public String toString() {
-        return "Camin{" +
-                "name='" + name + '\'' +
-                ", city='" + city + '\'' +
-                ", university='" + university + '\'' +
-                ", rating=" + rating +
-                '}';
+    public void addReview(Review review) {
+        this.reviews.add(review);
     }
 }
