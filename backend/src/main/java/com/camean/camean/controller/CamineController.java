@@ -35,6 +35,11 @@ public class CamineController {
         return cRepo.findAll();
     }
 
+    @GetMapping("/getCamine/test")
+    public List<Camin> test() {
+        return cRepo.findAll();
+    }
+
     @GetMapping("/getCamine/oras={city}")
     public List<CaminWithMedianReviews> getCamineOfCity(@PathVariable String city) {
         final List<Camin> filteredByCity = new ArrayList<>();
@@ -79,6 +84,8 @@ public class CamineController {
                     camin.getName(),
                     camin.getCity(),
                     camin.getOwner(),
+                    camin.getLatitude(),
+                    camin.getLongitude(),
                     starsSum / camin.getReviews().size(),
                     parkingTrue * 2 >= camin.getReviews().size() ? true : false,
                     elevatorTrue * 2 >= camin.getReviews().size() ? true : false,

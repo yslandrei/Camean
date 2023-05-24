@@ -8,10 +8,13 @@ import java.util.ArrayList;
 
 public class CaminWithMedianReviews {
     @Id
-    private ObjectId id;
+    private String id;
     private String name;
     private String city;
     private String owner;
+    private Double latitude;
+    private Double longitude;
+
     private Float stars;
     private Boolean parking;
     private Boolean elevator;
@@ -20,11 +23,13 @@ public class CaminWithMedianReviews {
     private String sex;
     private Integer pricePerMonth;
 
-    public CaminWithMedianReviews(ObjectId id, String name, String city, String owner, Float stars, Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth) {
+    public CaminWithMedianReviews(String id, String name, String city, String owner, Double latitude, Double longitude, Float stars, Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.owner = owner;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.stars = stars;
         this.parking = parking;
         this.elevator = elevator;
@@ -37,10 +42,12 @@ public class CaminWithMedianReviews {
     @Override
     public String toString() {
         return "CaminWithMedianReviews{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 ", owner='" + owner + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", stars=" + stars +
                 ", parking=" + parking +
                 ", elevator=" + elevator +
@@ -51,11 +58,11 @@ public class CaminWithMedianReviews {
                 '}';
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -81,6 +88,22 @@ public class CaminWithMedianReviews {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public Float getStars() {

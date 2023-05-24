@@ -13,7 +13,7 @@ export default function CityLayout({ children }: { children: React.ReactNode }) 
 function Navbar() {
   return (
     <>
-      <nav className='w-full fixed z-[1]'>
+      <nav className='w-full top-[0px] fixed z-[1]'>
         <div className='h-[80px] bg-white-snow flex md:justify-between justify-center'>
           <div className='md:flex hidden justify-start self-center ml-[2vw]'>
             <Link href={`/`}><p className='text-center text-4xl font-bold  text-blue-3 cursor-pointer'>Camean</p></Link>

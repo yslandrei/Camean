@@ -9,37 +9,43 @@ import java.util.ArrayList;
 @Document(collection = "camine")
 public class Camin {
     @Id
-    private ObjectId id;
+    private String id;
     private String name;
     private String city;
     private String owner;
+    private Double latitude;
+    private Double longitude;
     private ArrayList<Review> reviews;
 
-    public Camin(ObjectId id, String name, String city, String owner, ArrayList<Review> reviews) {
+    public Camin(String id, String name, String city, String owner, Double latitude, Double longitude, ArrayList<Review> reviews) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.owner = owner;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.reviews = reviews;
     }
 
     @Override
     public String toString() {
         return "Camin{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 ", owner='" + owner + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", reviews=" + reviews +
                 '}';
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
-    public ObjectId getId() {
-        return id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -64,6 +70,22 @@ public class Camin {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public ArrayList<Review> getReviews() {
