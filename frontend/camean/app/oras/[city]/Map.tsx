@@ -2,9 +2,11 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import ReactMapGL from 'react-map-gl'
-import { Marker } from 'react-map-gl'
+import { Marker, Popup } from 'react-map-gl'
 import { caminWithMedianReviews } from './page'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import './Map.css'
+import { AiFillStar } from 'react-icons/ai'
 
 export default function Map(props: { city: string, camine: caminWithMedianReviews[] }) {
   const [viewState, setViewState] = useState({
@@ -31,13 +33,14 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
     fetchLonLat();
   }, []);
 
-  const [focusedId, setFocusedId] = useState<string>()
-  const handleChangeFocused = (camin: caminWithMedianReviews) => {
-    if (focusedId == camin.id) {
-      setFocusedId('')
+  const [focusedCamin, setFocusedCamin] = useState<caminWithMedianReviews>()
+  const handleChangeFocused = (e: any, camin: caminWithMedianReviews) => {
+    e.originalEvent.stopPropagation();
+    if (focusedCamin?.id == camin.id) {
+      setFocusedCamin(undefined)
     } 
     else {
-      setFocusedId(camin.id)
+      setFocusedCamin(camin)
     }
   }
 
@@ -51,36 +54,57 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
       mapboxAccessToken={process.env.mapbox_key}
     >
       {props.camine.map((camin: any) => (
-          <Marker
-            key={camin.id}
-            longitude={camin.longitude}
-            latitude={camin.latitude}
-            offset={focusedId == camin.id ? [0, -115] : [0, 0]}
-          >
-            <div className='flex flex-col items-center'>
-              {focusedId == camin.id ? 
-                <div className='w-[300px] h-[220px] bg-white-snow shadow-xl rounded-[15px] cursor-pointer border-[0px] border-blue-3 mb-2'>
-                  <div className='w-full h-[60%] relative'>
-                    <Image
-                      className='rounded-t-[15px]'
-                      src="/camin1.jpg"
-                      fill={true}
-                      style={{objectFit: 'cover', display: focusedId == camin.id? 'hidden' : 'static'}}
-                      quality={100}
-                      alt=""
-                    />
-                  </div>
-                  <div className='py-1 px-2'>
-                    <p className='text-lg text-gray-700'>{camin.name}</p>
-                  </div>
-                </div>
-              : ''}
-              <div onClick={() => handleChangeFocused(camin)} className='ring-offset-[10px] w-[65px] h-[30px] rounded-[15px] flex justify-center items-center border-[1px] border-blue-3' style={{backgroundColor: focusedId == camin.id? '#2990e2' : '#F9F9FF'}}>
-                <p className='text-blue-3 font-bold text-base' style={{color: focusedId == camin.id? '#F9F9FF' : '#2990e2'}}>{camin.pricePerMonth} lei</p>
-              </div> 
-            </div>
-          </Marker>
+          <div key={camin.id}>
+            <Marker
+              longitude={camin.longitude}
+              latitude={camin.latitude}
+              offset={focusedCamin?.id == camin.id ? [0, -0] : [0, 0]}
+              onClick={(e) => handleChangeFocused(e, camin)}
+              >
+                <div  className='ring-offset-[10px] w-[65px] h-[30px] rounded-[15px] flex justify-center items-center border-[1px] border-blue-3' style={{backgroundColor: focusedCamin?.id == camin.id? '#2990e2' : '#F9F9FF'}}>
+                  <p className='text-blue-3 font-bold text-base' style={{color: focusedCamin?.id == camin.id? '#F9F9FF' : '#2990e2'}}>{camin.pricePerMonth} lei</p>
+                </div> 
+            </Marker>
+            
+          </div>
+          
       ))}
+      {focusedCamin != undefined && (
+        <Popup
+          latitude={focusedCamin.latitude}
+          longitude={focusedCamin.longitude}
+          anchor='bottom'
+          offset={[0, -25]}
+          maxWidth='300px'
+          className='w-[300px] cursor-pointer'
+          closeButton={false}
+          closeOnClick={false}
+        >
+          <div className='h-[220px]'>
+            <div className='h-[60%] relative'>
+              <Image
+                className='rounded-t-[15px]'
+                src="/camin1.jpg"
+                fill={true} 
+                style={{objectFit: 'cover'}}
+                quality={100}
+                alt=""
+              />
+            </div>
+            <div className='py-1 px-2 w-full'>
+              <div className='flex justify-between'>
+                <p className='text-xl text-gray-700'>{focusedCamin.name}</p>
+                <div className='flex space-x-[2px] items-center'>
+                  <AiFillStar className='text-blue-3 w-[20px] h-[20px] relative top-[-1px]'/>
+                  <p className='text-base text-gray-700'>{focusedCamin.stars.toFixed(1)}</p>
+                </div>
+              </div>
+              <p className='text-base text-gray-700'>{focusedCamin.owner}</p>
+              
+            </div>
+          </div>
+        </Popup>
+      )}
     </ReactMapGL>
   )
 }
