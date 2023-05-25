@@ -10,6 +10,7 @@ export default function Home() {
             fill={true}
             style={{objectFit: 'cover'}}
             quality={100}
+            sizes={'100vw'}
             alt=""
           />
           <div className='absolute w-full'>

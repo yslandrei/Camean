@@ -28,7 +28,9 @@ export default function SearchBar() {
     'Tulcea',
   ]
   const path = usePathname()
-  const selectedCity: string = path.indexOf('oras') == -1 ? '' : path.slice(path.indexOf('oras') + 5).replaceAll('%20', ' ')
+  let selectedCity: string = path.indexOf('oras') == -1 ? '' : path.slice(path.indexOf('oras') + 5).replaceAll('%20', ' ')
+  if(selectedCity.indexOf('/') != -1)
+    selectedCity = selectedCity.slice(0, selectedCity.indexOf('/'))
   const [search, setSearch] = useState<string>(selectedCity)
   const [searchResults, setSearchResults] = useState<string[]>([])
 

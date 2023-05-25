@@ -3,12 +3,13 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import ReactMapGL from 'react-map-gl'
 import { Marker, Popup } from 'react-map-gl'
-import { caminWithMedianReviews } from './page'
+import { caminWithMedianReviewsType } from './page'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
 import { AiFillStar } from 'react-icons/ai'
+import Link from 'next/link'
 
-export default function Map(props: { city: string, camine: caminWithMedianReviews[] }) {
+export default function Map(props: { city: string, camine: caminWithMedianReviewsType[] }) {
   const [viewState, setViewState] = useState({
     latitude: 46.7741825,
     longitude: 23.5901124,
@@ -33,8 +34,8 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
     fetchLonLat();
   }, []);
 
-  const [focusedCamin, setFocusedCamin] = useState<caminWithMedianReviews>()
-  const handleChangeFocused = (e: any, camin: caminWithMedianReviews) => {
+  const [focusedCamin, setFocusedCamin] = useState<caminWithMedianReviewsType>()
+  const handleChangeFocused = (e: any, camin: caminWithMedianReviewsType) => {
     e.originalEvent.stopPropagation();
     if (focusedCamin?.id == camin.id) {
       setFocusedCamin(undefined)
@@ -70,40 +71,43 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
           
       ))}
       {focusedCamin != undefined && (
-        <Popup
-          latitude={focusedCamin.latitude}
-          longitude={focusedCamin.longitude}
-          anchor='bottom'
-          offset={[0, -25]}
-          maxWidth='300px'
-          className='w-[300px] cursor-pointer'
-          closeButton={false}
-          closeOnClick={false}
-        >
-          <div className='h-[220px]'>
-            <div className='h-[60%] relative'>
-              <Image
-                className='rounded-t-[15px]'
-                src="/camin1.jpg"
-                fill={true} 
-                style={{objectFit: 'cover'}}
-                quality={100}
-                alt=""
-              />
-            </div>
-            <div className='py-1 px-2 w-full'>
-              <div className='flex justify-between'>
-                <p className='text-xl text-gray-700'>{focusedCamin.name}</p>
-                <div className='flex space-x-[2px] items-center'>
-                  <AiFillStar className='text-blue-3 w-[20px] h-[20px] relative top-[-1px]'/>
-                  <p className='text-base text-gray-700'>{focusedCamin.stars.toFixed(1)}</p>
-                </div>
+        <Link href={`oras/${focusedCamin.city}/camin/${focusedCamin.id}`}>
+          <Popup
+            latitude={focusedCamin.latitude}
+            longitude={focusedCamin.longitude}
+            anchor='bottom'
+            offset={[0, -25]}
+            maxWidth='300px'
+            className='w-[300px] cursor-pointer'
+            closeButton={false}
+            closeOnClick={false}
+          >
+            <div className='h-[220px]'>
+              <div className='h-[60%] relative'>
+                <Image
+                  className='rounded-t-[15px]'
+                  src="/camin1.jpg"
+                  fill={true} 
+                  style={{objectFit: 'cover'}}
+                  quality={100}
+                  sizes='(max-width: 1024px) 0px, 300px'
+                  alt=""
+                />
               </div>
-              <p className='text-base text-gray-700'>{focusedCamin.owner}</p>
-              
+              <div className='py-1 px-2 w-full'>
+                <div className='flex justify-between'>
+                  <p className='text-xl text-gray-700'>{focusedCamin.name}</p>
+                  <div className='flex space-x-[2px] items-center'>
+                    <AiFillStar className='text-blue-3 w-[20px] h-[20px] relative top-[-1px]'/>
+                    <p className='text-base text-gray-700'>{focusedCamin.stars.toFixed(1)}</p>
+                  </div>
+                </div>
+                <p className='text-base text-gray-700'>{focusedCamin.owner}</p>
+                
+              </div>
             </div>
-          </div>
-        </Popup>
+          </Popup>
+        </Link>
       )}
     </ReactMapGL>
   )

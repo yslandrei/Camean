@@ -35,13 +35,54 @@ public class CamineController {
         return cRepo.findAll();
     }
 
-    @GetMapping("/getCamine/test")
-    public List<Camin> test() {
-        return cRepo.findAll();
+    @GetMapping("/getCamine/id={id}")
+    public CaminWithMedianReviews getCaminWithMedianReviewsById(@PathVariable String id) {
+        ObjectId objectId = new ObjectId(id);
+        Optional<Camin> optionalCamin = cRepo.findById(objectId);
+        Camin foundCamin = optionalCamin.get();
+
+        float starsSum = 0;
+        int parkingTrue = 0, elevatorTrue = 0, bathTrue = 0, kitchenTrue = 0;
+        Map<String, Integer> sexMap = new HashMap<>();
+        Map<Integer, Integer> pricePerMonthMap = new HashMap<>();
+
+        int mostUsedPricePerMonth = 0, mostUsedPricePerMonthUses = 0;
+        for(int j = 0; j < foundCamin.getReviews().size(); j ++) {
+            Review reviewCamin = foundCamin.getReviews().get(j);
+
+            starsSum += reviewCamin.getStars();
+            parkingTrue += reviewCamin.getFacilities().getParking() ? 1 : 0;
+            elevatorTrue += reviewCamin.getFacilities().getElevator() ? 1 : 0;
+            bathTrue += reviewCamin.getFacilities().getBath() ? 1 : 0;
+            kitchenTrue += reviewCamin.getFacilities().getKitchen() ? 1 : 0;
+            sexMap.put(reviewCamin.getFacilities().getSex(), sexMap.getOrDefault(reviewCamin.getFacilities().getSex(), 0) + 1);
+            pricePerMonthMap.put(reviewCamin.getFacilities().getPricePerMonth(), pricePerMonthMap.getOrDefault(reviewCamin.getFacilities().getPricePerMonth(), 0) + 1);
+            if(pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth()) > mostUsedPricePerMonthUses) {
+                mostUsedPricePerMonthUses = pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth());
+                mostUsedPricePerMonth = reviewCamin.getFacilities().getPricePerMonth();
+            }
+        }
+
+        return (new CaminWithMedianReviews(
+                foundCamin.getId(),
+                foundCamin.getName(),
+                foundCamin.getCity(),
+                foundCamin.getOwner(),
+                foundCamin.getLatitude(),
+                foundCamin.getLongitude(),
+                foundCamin.getReviews().size(),
+                starsSum / foundCamin.getReviews().size(),
+                parkingTrue * 2 >= foundCamin.getReviews().size() ? true : false,
+                elevatorTrue * 2 >= foundCamin.getReviews().size() ? true : false,
+                bathTrue * 2 >= foundCamin.getReviews().size() ? true : false,
+                kitchenTrue * 2 >= foundCamin.getReviews().size() ? true : false,
+                sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("fete", 0) ? (sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("mixt", 0) ? "baieti" : "mixt") : (sexMap.getOrDefault("fete", 0) > sexMap.getOrDefault("mixt", 0) ? "fete" : "mixt"),
+                mostUsedPricePerMonth
+        ));
     }
 
     @GetMapping("/getCamine/oras={city}")
-    public List<CaminWithMedianReviews> getCamineOfCity(@PathVariable String city) {
+    public List<CaminWithMedianReviews> getCamineWithMedianReviewsByCity(@PathVariable String city) {
         final List<Camin> filteredByCity = new ArrayList<>();
 
         MongoDatabase database = mongoClient.getDatabase("camean");
@@ -86,6 +127,7 @@ public class CamineController {
                     camin.getOwner(),
                     camin.getLatitude(),
                     camin.getLongitude(),
+                    camin.getReviews().size(),
                     starsSum / camin.getReviews().size(),
                     parkingTrue * 2 >= camin.getReviews().size() ? true : false,
                     elevatorTrue * 2 >= camin.getReviews().size() ? true : false,
@@ -96,6 +138,14 @@ public class CamineController {
             ));
         }
         return filteredByCityWithMedianReviews;
+    }
+
+    @GetMapping("/getReviews/id={id}")
+    public ArrayList<Review> getReviewsById(@PathVariable String id) {
+        ObjectId objectId = new ObjectId(id);
+        Optional<Camin> optionalCamin = cRepo.findById(objectId);
+        Camin foundCamin = optionalCamin.get();
+        return foundCamin.getReviews();
     }
 
     @PostMapping("/postReview")

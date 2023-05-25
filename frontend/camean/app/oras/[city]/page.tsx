@@ -2,14 +2,14 @@ import CaminCard from "./CaminCard";
 import LineBreak from "./LineBreak";
 import Map from "./Map";
 
-export type caminWithMedianReviews = {
-  //id: string,
+export type caminWithMedianReviewsType = {
   id: string,
   name: string,
   city: string,
   owner: string,
   latitude: number,
   longitude: number,
+  reviewsCount: number,
   stars: number,
   parking: boolean,
   elevator: boolean,
@@ -20,10 +20,9 @@ export type caminWithMedianReviews = {
 }
 
 export default async function Home( info: { params: { city: string } } ) {
-  async function fetchCamineOfCity(city: string) {
+  async function fetchCamineWithMedianReviewsByCity(city: string) {
     try {
       const response = await fetch(`http://localhost:8080/getCamine/oras=${city}`, { next: { revalidate: 10 } })
-      //const response = await fetch(`http://localhost:8080/getCamine/${city}`)
       const data = await response.json();
       return data
     }
@@ -32,8 +31,8 @@ export default async function Home( info: { params: { city: string } } ) {
     }
   }
 
-  const caminePromise = (await Promise.all([fetchCamineOfCity(info.params.city)]))[0]
-  const camine: caminWithMedianReviews[] = (await Promise.all([caminePromise]))[0]
+  const caminePromise = (await Promise.all([fetchCamineWithMedianReviewsByCity(info.params.city)]))[0]
+  const camine: caminWithMedianReviewsType[] = (await Promise.all([caminePromise]))[0]
 
   return (
     <div>
