@@ -20,4 +20,5 @@
 .mapboxgl-map {
   font:inherit;
   font-smooth: always;
+  z-index: 0;
 }

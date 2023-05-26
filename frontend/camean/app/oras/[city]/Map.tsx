@@ -9,11 +9,11 @@ import './Map.css'
 import { AiFillStar } from 'react-icons/ai'
 import Link from 'next/link'
 
-export default function Map(props: { city: string, camine: caminWithMedianReviewsType[] }) {
+export default function Map(props: { city?: string, camin?: caminWithMedianReviewsType, camine: caminWithMedianReviewsType[] }) {
   const [viewState, setViewState] = useState({
-    latitude: 46.7741825,
-    longitude: 23.5901124,
-    zoom: 12
+    latitude: typeof props.camin != 'undefined' ? props.camin.latitude : 46.7741825,
+    longitude: typeof props.camin != 'undefined' ? props.camin.longitude : 23.5901124,
+    zoom: typeof props.camin != 'undefined' ? 15 : 12
   })
   
   async function fetchLonLat() {
@@ -30,9 +30,11 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
     }
   }
 
-  useEffect(() => {
-    fetchLonLat();
-  }, []);
+  if(typeof props.city != undefined) {
+    useEffect(() => {
+      fetchLonLat();
+    }, []);
+  }
 
   const [focusedCamin, setFocusedCamin] = useState<caminWithMedianReviewsType>()
   const handleChangeFocused = (e: any, camin: caminWithMedianReviewsType) => {
@@ -45,9 +47,9 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
     }
   }
 
-
   return (
     <ReactMapGL
+      style={{borderRadius: typeof props.camin != 'undefined' ? '15px' : '0px'}}
       {...viewState}
       doubleClickZoom={false}
       onMove={e => setViewState(e.viewState)}
@@ -63,7 +65,7 @@ export default function Map(props: { city: string, camine: caminWithMedianReview
               onClick={(e) => handleChangeFocused(e, camin)}
               >
                 <div  className='ring-offset-[10px] w-[65px] h-[30px] rounded-[15px] flex justify-center items-center border-[1px] border-blue-3' style={{backgroundColor: focusedCamin?.id == camin.id? '#2990e2' : '#F9F9FF'}}>
-                  <p className='text-blue-3 font-bold text-base' style={{color: focusedCamin?.id == camin.id? '#F9F9FF' : '#2990e2'}}>{camin.pricePerMonth} lei</p>
+                  <p className='text-blue-3 font-bold text-base cursor-pointer' style={{color: focusedCamin?.id == camin.id? '#F9F9FF' : '#2990e2'}}>{camin.pricePerMonth} lei</p>
                 </div> 
             </Marker>
             
