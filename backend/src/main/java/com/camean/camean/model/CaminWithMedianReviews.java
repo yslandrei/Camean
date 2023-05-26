@@ -23,8 +23,9 @@ public class CaminWithMedianReviews {
     private Boolean kitchen;
     private String sex;
     private Integer pricePerMonth;
+    private Integer peoplePerRoom;
 
-    public CaminWithMedianReviews(String id, String name, String city, String owner, Double latitude, Double longitude, Integer reviewsCount, Float stars, Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth) {
+    public CaminWithMedianReviews(String id, String name, String city, String owner, Double latitude, Double longitude, Integer reviewsCount, Float stars, Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth, Integer peoplePerRoom) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -39,6 +40,7 @@ public class CaminWithMedianReviews {
         this.kitchen = kitchen;
         this.sex = sex;
         this.pricePerMonth = pricePerMonth;
+        this.peoplePerRoom = peoplePerRoom;
     }
 
     @Override
@@ -58,7 +60,16 @@ public class CaminWithMedianReviews {
                 ", kitchen=" + kitchen +
                 ", sex='" + sex + '\'' +
                 ", pricePerMonth=" + pricePerMonth +
+                ", peoplePerRoom=" + peoplePerRoom +
                 '}';
+    }
+
+    public Integer getPeoplePerRoom() {
+        return peoplePerRoom;
+    }
+
+    public void setPeoplePerRoom(Integer peoplePerRoom) {
+        this.peoplePerRoom = peoplePerRoom;
     }
 
     public Integer getReviewsCount() {

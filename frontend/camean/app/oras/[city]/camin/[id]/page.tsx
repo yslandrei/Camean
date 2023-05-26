@@ -27,10 +27,11 @@ export type facilityType = {
   kitchen: boolean,
   sex: string,
   pricePerMonth: number,
+  peoplePerRoom: number,
 }
 
-export default async function Home( info: { params: { id: string, camine: caminWithMedianReviewsType[] } } ) {
-  async function fetchCaminById(id: string) {
+export default async function Home( info: { params: { id: string } } ) {
+  async function fetchCaminWithMedianReviewsById(id: string) {
     try {
       const response = await fetch(`http://localhost:8080/getCamine/id=${id}`, { next: { revalidate: 10 } })
       const data = await response.json();
@@ -52,7 +53,7 @@ export default async function Home( info: { params: { id: string, camine: caminW
     }
   }
   
-  const caminPromise = (await Promise.all([fetchCaminById(info.params.id)]))[0]
+  const caminPromise = (await Promise.all([fetchCaminWithMedianReviewsById(info.params.id)]))[0]
   const camin: caminWithMedianReviewsType = (await Promise.all([caminPromise]))[0]
   const caminePromise = (await Promise.all([fetchCamineWithMedianReviewsByCity(camin.city)]))[0]
   const camine: caminWithMedianReviewsType[] = (await Promise.all([caminePromise]))[0]

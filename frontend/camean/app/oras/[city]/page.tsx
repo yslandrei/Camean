@@ -17,6 +17,7 @@ export type caminWithMedianReviewsType = {
   kitchen: boolean,
   sex: string,
   pricePerMonth: number,
+  peoplePerRoom: number,
 }
 
 export default async function Home( info: { params: { city: string } } ) {

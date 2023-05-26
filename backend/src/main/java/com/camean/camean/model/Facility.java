@@ -7,26 +7,37 @@ public class Facility {
     private Boolean kitchen;
     private String sex;
     private Integer pricePerMonth;
+    private Integer peoplePerRoom;
 
-    public Facility(Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth) {
+    public Facility(Boolean parking, Boolean elevator, Boolean bath, Boolean kitchen, String sex, Integer pricePerMonth, Integer peoplePerRoom) {
         this.parking = parking;
         this.elevator = elevator;
         this.bath = bath;
         this.kitchen = kitchen;
         this.sex = sex;
         this.pricePerMonth = pricePerMonth;
+        this.peoplePerRoom = peoplePerRoom;
     }
 
     @Override
     public String toString() {
-        return "Facilities{" +
+        return "Facility{" +
                 "parking=" + parking +
                 ", elevator=" + elevator +
                 ", bath=" + bath +
                 ", kitchen=" + kitchen +
                 ", sex='" + sex + '\'' +
                 ", pricePerMonth=" + pricePerMonth +
+                ", peoplePerRoom=" + peoplePerRoom +
                 '}';
+    }
+
+    public Integer getPeoplePerRoom() {
+        return peoplePerRoom;
+    }
+
+    public void setPeoplePerRoom(Integer peoplePerRoom) {
+        this.peoplePerRoom = peoplePerRoom;
     }
 
     public void setParking(Boolean parking) {

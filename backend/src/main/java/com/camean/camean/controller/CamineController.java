@@ -45,8 +45,10 @@ public class CamineController {
         int parkingTrue = 0, elevatorTrue = 0, bathTrue = 0, kitchenTrue = 0;
         Map<String, Integer> sexMap = new HashMap<>();
         Map<Integer, Integer> pricePerMonthMap = new HashMap<>();
+        Map<Integer, Integer> peoplePerRoomMap = new HashMap<>();
 
         int mostUsedPricePerMonth = 0, mostUsedPricePerMonthUses = 0;
+        int mostUsedPeoplePerRoom = 0, mostUsedPeoplePerRoomUses = 0;
         for(int j = 0; j < foundCamin.getReviews().size(); j ++) {
             Review reviewCamin = foundCamin.getReviews().get(j);
 
@@ -60,6 +62,11 @@ public class CamineController {
             if(pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth()) > mostUsedPricePerMonthUses) {
                 mostUsedPricePerMonthUses = pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth());
                 mostUsedPricePerMonth = reviewCamin.getFacilities().getPricePerMonth();
+            }
+            peoplePerRoomMap.put(reviewCamin.getFacilities().getPeoplePerRoom(), peoplePerRoomMap.getOrDefault(reviewCamin.getFacilities().getPeoplePerRoom(), 0) + 1);
+            if(peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom()) > mostUsedPeoplePerRoomUses) {
+                mostUsedPeoplePerRoomUses = peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom());
+                mostUsedPeoplePerRoom = reviewCamin.getFacilities().getPeoplePerRoom();
             }
         }
 
@@ -77,7 +84,8 @@ public class CamineController {
                 bathTrue * 2 >= foundCamin.getReviews().size() ? true : false,
                 kitchenTrue * 2 >= foundCamin.getReviews().size() ? true : false,
                 sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("fete", 0) ? (sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("mixt", 0) ? "baieti" : "mixt") : (sexMap.getOrDefault("fete", 0) > sexMap.getOrDefault("mixt", 0) ? "fete" : "mixt"),
-                mostUsedPricePerMonth
+                mostUsedPricePerMonth,
+                mostUsedPeoplePerRoom
         ));
     }
 
@@ -101,8 +109,10 @@ public class CamineController {
             int parkingTrue = 0, elevatorTrue = 0, bathTrue = 0, kitchenTrue = 0;
             Map<String, Integer> sexMap = new HashMap<>();
             Map<Integer, Integer> pricePerMonthMap = new HashMap<>();
+            Map<Integer, Integer> peoplePerRoomMap = new HashMap<>();
 
             int mostUsedPricePerMonth = 0, mostUsedPricePerMonthUses = 0;
+            int mostUsedPeoplePerRoom = 0, mostUsedPeoplePerRoomUses = 0;
             Camin camin = filteredByCity.get(i);
             for(int j = 0; j < camin.getReviews().size(); j ++) {
                 Review reviewCamin = camin.getReviews().get(j);
@@ -117,6 +127,10 @@ public class CamineController {
                 if(pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth()) > mostUsedPricePerMonthUses) {
                     mostUsedPricePerMonthUses = pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth());
                     mostUsedPricePerMonth = reviewCamin.getFacilities().getPricePerMonth();
+                }
+                if(peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom()) > mostUsedPeoplePerRoomUses) {
+                    mostUsedPeoplePerRoomUses = peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom());
+                    mostUsedPeoplePerRoom = reviewCamin.getFacilities().getPeoplePerRoom();
                 }
             }
 
@@ -134,7 +148,8 @@ public class CamineController {
                     bathTrue * 2 >= camin.getReviews().size() ? true : false,
                     kitchenTrue * 2 >= camin.getReviews().size() ? true : false,
                     sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("fete", 0) ? (sexMap.getOrDefault("baieti", 0) > sexMap.getOrDefault("mixt", 0) ? "baieti" : "mixt") : (sexMap.getOrDefault("fete", 0) > sexMap.getOrDefault("mixt", 0) ? "fete" : "mixt"),
-                    mostUsedPricePerMonth
+                    mostUsedPricePerMonth,
+                    mostUsedPeoplePerRoom
             ));
         }
         return filteredByCityWithMedianReviews;
