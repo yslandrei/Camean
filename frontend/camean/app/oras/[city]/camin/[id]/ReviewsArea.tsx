@@ -11,11 +11,14 @@ export default function ReviewsArea(props: { reviews: reviewType[] }) {
 
   return (
     <>
+      {/* Reviews */}
       <div className='flex flex-wrap w-full'>
         {props.reviews.slice((page - 1) * reviewsPerPage, page * reviewsPerPage).map((review, index) => (
           <ReviewCard key={index} review={review}/>
         ))}
       </div>
+
+      {/* Pages */}
       <div className='flex w-full justify-center h-[50px] relative' style={{top: page == pages ? '220px' : '40px'}}>
         <div className='rounded-[10px] bg-gray-300 space-x-2 p-[6px] flex'>
           {Array.from({ length: pages }, (_, index) => index + 1).map((pageNumber) => (
