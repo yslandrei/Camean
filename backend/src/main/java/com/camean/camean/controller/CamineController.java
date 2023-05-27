@@ -128,6 +128,7 @@ public class CamineController {
                     mostUsedPricePerMonthUses = pricePerMonthMap.get(reviewCamin.getFacilities().getPricePerMonth());
                     mostUsedPricePerMonth = reviewCamin.getFacilities().getPricePerMonth();
                 }
+                peoplePerRoomMap.put(reviewCamin.getFacilities().getPeoplePerRoom(), peoplePerRoomMap.getOrDefault(reviewCamin.getFacilities().getPeoplePerRoom(), 0) + 1);
                 if(peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom()) > mostUsedPeoplePerRoomUses) {
                     mostUsedPeoplePerRoomUses = peoplePerRoomMap.get(reviewCamin.getFacilities().getPeoplePerRoom());
                     mostUsedPeoplePerRoom = reviewCamin.getFacilities().getPeoplePerRoom();

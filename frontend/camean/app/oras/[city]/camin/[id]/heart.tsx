@@ -12,7 +12,7 @@ export default function Heart() {
       {hearted ? 
         <HiHeart className='text-red-500 w-[34px] h-[34px]'/>
         : 
-        <HiOutlineHeart className='text-gray-700 w-[34px] h-[34px]' /> 
+        <HiOutlineHeart className='text-gray-700 w-[34px] h-[34px]'/> 
       }
     </div>
   )

@@ -32,9 +32,8 @@ export default async function Home( info: { params: { city: string } } ) {
     }
   }
 
-  const caminePromise = (await Promise.all([fetchCamineWithMedianReviewsByCity(info.params.city)]))[0]
-  const camine: caminWithMedianReviewsType[] = (await Promise.all([caminePromise]))[0]
-
+  const camine: caminWithMedianReviewsType[] = (await Promise.all([fetchCamineWithMedianReviewsByCity(info.params.city)]))[0]
+  console.log(camine)
   return (
     <div>
       <div className='flex flex-col lg:w-[60%] w-[100%] mt-[81px]'>

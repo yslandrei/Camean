@@ -92,7 +92,7 @@ export default function Map(props: { city?: string, camin?: caminWithMedianRevie
                   fill={true} 
                   style={{objectFit: 'cover'}}
                   quality={100}
-                  sizes='(max-width: 1024px) 0px, 300px'
+                  sizes= {typeof props.camin != 'undefined' ? '(max-width: 1024px) 300px, 300px' : '(max-width: 1024px) 0px, 300px'}
                   alt=""
                 />
               </div>

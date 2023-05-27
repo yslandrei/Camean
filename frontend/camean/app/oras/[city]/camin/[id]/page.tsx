@@ -11,6 +11,8 @@ import { BiRestaurant } from "react-icons/bi"
 import { MdGirl, MdBoy } from "react-icons/md"
 import { HiWifi } from "react-icons/hi"
 import { GiWashingMachine } from "react-icons/gi"
+import { HiUserCircle } from "react-icons/hi"
+import ReviewsArea from "./ReviewsArea"
 
 export type reviewType = {
   author: string,
@@ -52,29 +54,39 @@ export default async function Home( info: { params: { id: string } } ) {
       console.error('Error:', error);
     }
   }
+
+  async function fetchReviewsById(id: string) {
+    try {
+      const response = await fetch(`http://localhost:8080/getReviews/id=${id}`, { next: { revalidate: 10 } })
+      const data = await response.json();
+      return data
+    }
+    catch (error) {
+      console.error('Error:', error);
+    }
+  }
   
-  const caminPromise = (await Promise.all([fetchCaminWithMedianReviewsById(info.params.id)]))[0]
-  const camin: caminWithMedianReviewsType = (await Promise.all([caminPromise]))[0]
-  const caminePromise = (await Promise.all([fetchCamineWithMedianReviewsByCity(camin.city)]))[0]
-  const camine: caminWithMedianReviewsType[] = (await Promise.all([caminePromise]))[0]
+  const camin: caminWithMedianReviewsType = (await Promise.all([fetchCaminWithMedianReviewsById(info.params.id)]))[0]
+  const camine: caminWithMedianReviewsType[] = (await Promise.all([fetchCamineWithMedianReviewsByCity(camin.city)]))[0]
+  const reviews: reviewType[] = (await Promise.all([fetchReviewsById(info.params.id)]))[0]
 
   return (
     <div className='mt-[81px] flex justify-center'>
       <div className='max-w-[1200px] w-[90vw] mt-[20px]'>
         {/* Name */}
-        <p className='text-3xl font-semibold text-gray-700'>{camin.name}</p>
+        <p className='text-4xl font-semibold text-gray-700'>{camin.name}</p>
 
         {/* Stars + ReviewsCount + City + Heart */}
         <div className='flex justify-between'>
           <div className='flex space-x-[5px] items-center mt-2'>
             <div className='flex space-x-[2px] items-center'>
-              <AiFillStar className='text-blue-3 md:w-[23px] md:h-[23px] w-[15px] h-[15px] relative top-[-1px]'/>
-              <p className='md:text-lg text-xs text-gray-700'>{camin.stars.toFixed(1)}</p>
+              <AiFillStar className='text-blue-3 w-[23px] h-[23px] relative top-[-1px]'/>
+              <p className='text-lg text-gray-700'>{camin.stars.toFixed(1)}</p>
             </div>
-            <p className='md:text-lg text-xs text-gray-700 relative top-[-2px]'>•</p>
-            <p className='md:text-lg text-xs text-gray-700'>{camin.reviewsCount} recenzii</p>
-            <p className='md:text-lg text-xs text-gray-700 relative top-[-2px]'>•</p>
-            <Link href={`/oras/${camin.city}`}><p className='md:text-lg text-xs text-gray-700 underline'>{camin.city}</p></Link>
+            <p className='text-lg text-gray-700 relative top-[-1px]'>•</p>
+            <p className='text-lg text-gray-700'>{camin.reviewsCount} recenzii</p>
+            <p className='text-lg text-gray-700 relative top-[-1px]'>•</p>
+            <Link href={`/oras/${camin.city}`}><p className='text-lg text-gray-700 underline'>{camin.city}</p></Link>
           </div>
           <Heart/>
         </div>
@@ -129,11 +141,11 @@ export default async function Home( info: { params: { id: string } } ) {
           <LineBreak width='100%'/>
         </div>
 
-        <div className='w-full h-[500px] flex'>
+        <div className='w-full h-[500px] flex flex-wrap'>
           {/* Facilities */}
-          <div className='w-1/2 '>
+          <div className='lg:w-1/2 w-full'>
             <p className='text-3xl text-gray-700'>Ce ofera acest camin</p>
-            <div className='flex flex-wrap w-full items-center mt-8'>
+            <div className='flex flex-wrap w-full items-center mt-[28px]'>
               {camin.parking && <div className='flex w-[250px] h-[50px] space-x-[13px] items-center mr-12 mb-6'>
                 <FaParking className='text-blue-3 w-[40px] h-[40px]'/>
                 <p className='text-xl text-gray-700'>Parcare</p>    
@@ -173,11 +185,12 @@ export default async function Home( info: { params: { id: string } } ) {
               </div>}
             </div>
           </div>
+          
 
           {/* Map */}
-          <div className='w-1/2'>
-            <p className='text-3xl text-gray-700 mb-8'>Locatie</p>
-            <div className='w-full h-[432px]'>
+          <div className='lg:w-1/2 w-full'>
+            <p className='text-3xl text-gray-700'>Locatie</p>
+            <div className='w-full h-[432px] mt-8'>
               <Map camin={camin} camine={camine}/>
             </div>
           </div>
@@ -188,6 +201,20 @@ export default async function Home( info: { params: { id: string } } ) {
           <LineBreak width='100%'/>
         </div>
 
+        {/* Reviews */}
+        <div className='w-full space-y-1'>
+          <p className='text-3xl text-gray-700'>Recenzii</p>
+          <div className='flex space-x-[5px] items-center'>
+            <div className='flex space-x-[2px] items-center'>
+              <AiFillStar className='text-blue-3 w-[23px] h-[23px] relative top-[-1px]'/>
+              <p className='text-lg text-gray-700'>{camin.stars.toFixed(1)}</p>
+            </div>
+            <p className='text-lg text-gray-700 relative top-[-1px]'>•</p>
+            <p className='text-lg text-gray-700'>{camin.reviewsCount} recenzii</p>
+          </div>
+          <p className='text-lg text-gray-500'>Toate informatiile disponibile provin din recenziile utilizatorilor</p >
+          <ReviewsArea reviews={reviews}/>
+        </div>
         <div className='w-full h-[1000px]'/>
       </div>
     </div>
