@@ -13,6 +13,7 @@ import { HiWifi } from "react-icons/hi"
 import { GiWashingMachine } from "react-icons/gi"
 import { HiUserCircle } from "react-icons/hi"
 import ReviewsArea from "./ReviewsArea"
+import { RiHotelBedFill } from "react-icons/ri";
 
 export type reviewType = {
   author: string,
@@ -164,6 +165,11 @@ export default async function Home( info: { params: { id: string } } ) {
               {camin.kitchen && <div className='flex w-[250px] h-[50px] space-x-2 items-center mr-12 mb-6'>
                 <BiRestaurant className='text-blue-3 w-[46px] h-[46px] relative left-[-1%]'/>
                 <p className='text-xl text-gray-700'>Bucatarie in camera</p>    
+              </div>}
+
+              {camin.peoplePerRoom && <div className='flex w-[250px] h-[50px] space-x-2 items-center mr-12 mb-6'>
+                <RiHotelBedFill className='text-blue-3 w-[40px] h-[40px] relative left-[0%]'/>
+                <p className='text-xl text-gray-700'>{camin.peoplePerRoom > 1 ? `${camin.peoplePerRoom} Persoane` : 'O Persoana'} / Camera</p>    
               </div>}
 
               {camin.sex == 'mixt' && <div className='flex w-[250px] h-[50px] space-x-2 items-center mr-12 mb-6'>
