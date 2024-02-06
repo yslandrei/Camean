@@ -1,6 +1,6 @@
 # Camean
 
-Created an AirBnb type of app for both private and university-owned student accommodation where users can share reviews, photos and 
+Created an AirBnb type of app for both private and university-owned student accommodation where users can share reviews and photos
 
 # Demo
 
